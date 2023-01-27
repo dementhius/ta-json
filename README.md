@@ -1,5 +1,7 @@
 # Type-Aware JSON Parser & Serializer (ta-json)
 
+FORKED FROM https://github.com/edcarroll/ta-json.git to fix a multilevel [inheritance](#jsondiscrimatorpropertypropertystring--jsondiscriminatorvaluevalueany) problem.
+
 <a href="https://www.npmjs.com/package/ta-json">
   <img alt="npm" src="https://img.shields.io/npm/v/ta-json.svg?style=flat-square" />
 </a>
@@ -14,7 +16,7 @@ Supports [parameterized class constructors](#jsonobject), nesting classes, [inhe
 ## Installation
 
 ```sh
-$ npm install --save ta-json
+$ npm install --save ta-json-deep
 ```
 
 ## Quickstart
@@ -151,37 +153,69 @@ Multi-level inheritance is fully supported, by the @JsonDiscriminatorValue and t
 ```typescript
 import { JSON, JsonObject, JsonProperty, JsonDiscriminatorProperty, JsonDiscriminatorValue } from "ta-json";
 
-export enum AnimalType { Cat = 0, Dog = 1 }
+export enum AnimalBaseType { Mammal = 'BaseAnimal_0', Bird = 'BaseAnimal_1' }
+export enum AnimalType { Dog = 'Mammal_0', Cat = 'Mammal_1', Eagle ='Bird_0' }
 
 @JsonObject()
 @JsonDiscriminatorProperty("type")
 export class Animal {
     @JsonProperty()
-    type:AnimalType;
+    type:AnimalBaseType;
+
+    constructor(type: AnimalType | AnimalBaseType) {
+        this.type = type;
+    }
 }
 
 @JsonObject()
-@JsonDiscriminatorValue(AnimalType.Cat)
-export class Cat extends Animal {
-    constructor() {
-        super();
-        this.type = AnimalType.Cat;
+@JsonDiscriminatorValue(AnimalBaseType.Mammal)
+export class Mammal extends Animal {
+
+    constructor(type: AnimalType | AnimalBaseType = AnimalBaseType.Mammal) {
+        super(type);
     }
 }
 
 @JsonObject()
 @JsonDiscriminatorValue(AnimalType.Dog)
-export class Dog extends Animal {
-    constructor() {
-        super();
-        this.type = AnimalType.Dog;
+export class Dog extends Mammal {
+
+    constructor(type: AnimalType | AnimalBaseType = AnimalType.Dog) {
+        super(type);
     }
 }
 
-let animals = [new Cat(), new Dog()];
+@JsonObject()
+@JsonDiscriminatorValue(AnimalType.Cat)
+export class Cat extends Mammal {
+
+    constructor(type: AnimalType | AnimalBaseType = AnimalType.Cat) {
+        super(type);
+    }
+}
+
+@JsonObject()
+@JsonDiscriminatorValue(AnimalBaseType.Bird)
+export class Bird extends Animal {
+
+    constructor(type: AnimalType | AnimalBaseType = Animal.Bird) {
+        super(type);
+    }
+}
+
+@JsonObject()
+@JsonDiscriminatorValue(AnimalType.Eagle)
+export class Eagle extends Bird {
+
+    constructor(type: AnimalType | AnimalBaseType = AnimalType.Eagle) {
+        super(type);
+    }
+}
+
+let animals = [new Mammal(), new Bird(), new Cat()];
 
 JSON.stringify(animals); // [{"type":0},{"type":1}]
-JSON.parse<Animal[]>('[{"type":0},{"type":1}]', Animal); // [ Cat { type: 0 }, Dog { type: 1 } ]
+JSON.parse<Animal[]>('[{"type":"BaseAnimal_0"},{"type":"BaseAnimal_1"},{"type":"Mamal_1"}]', Animal); // [ Mammal { type: "BaseAnimal_0" }, Bird { type: "BaseAnimal_1" }, Car { type: "Mammal_1" } ]
 ```
 
 ### @BeforeDeserialized()
