@@ -1,5 +1,5 @@
 {
-  "name": "ta-json",
+  "name": "ta-json-deep",
   "version": "2.5.0",
   "description": "Type-aware JSON serializer/parser",
   "main": "dist/cjs/index.js",
@@ -14,12 +14,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/edcarroll/ta-json.git"
+    "url": "git+https://github.com/dementhius/ta-json-deep.git"
   },
   "author": "Edward Carroll",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/edcarroll/ta-json/issues"
+    "url": "https://github.com/dementhius/ta-json-deep/issues"
   },
   "keywords": [
     "json",
@@ -32,7 +32,7 @@
     "serializer",
     "parser"
   ],
-  "homepage": "https://github.com/edcarroll/ta-json#readme",
+  "homepage": "https://github.com/dementhius/ta-json-deep#readme",
   "dependencies": {
     "reflect-metadata": "^0.1.12"
   },
