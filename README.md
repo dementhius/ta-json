@@ -215,7 +215,7 @@ export class Eagle extends Bird {
 let animals = [new Mammal(), new Bird(), new Cat()];
 
 JSON.stringify(animals); // [{"type":"BaseAnimal_0"},{"type":"BaseAnimal_1"},{"type":"Mamal_1"}]
-JSON.parse<Animal[]>('[{"type":"BaseAnimal_0"},{"type":"BaseAnimal_1"},{"type":"Mamal_1"}]', Animal); // [ Mammal { type: "BaseAnimal_0" }, Bird { type: "BaseAnimal_1" }, Car { type: "Mammal_1" } ]
+JSON.parse<Animal[]>('[{"type":"BaseAnimal_0"},{"type":"BaseAnimal_1"},{"type":"Mamal_1"}]', Animal); // [ Mammal { type: "BaseAnimal_0" }, Bird { type: "BaseAnimal_1" }, Cat { type: "Mammal_1" } ]
 ```
 
 ### @BeforeDeserialized()
